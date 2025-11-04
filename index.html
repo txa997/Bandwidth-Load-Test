@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bandwidth Load Test</title>
+  <style>
+
+    * {
+      margin: auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    .title {
+      color: #00ffcc;
+      margin-bottom: 12px;
+    }
+    .disc {
+      margin-bottom: 20px;
+    }
+    .log {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      line-height: 2;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #222;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: left;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #00ddb3;
+    }
+
+    .author {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .author a {
+      color: #fff;
+      opacity: .6;
+    }
+
+    .author a:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">🚀 Bandwidth Load Test</h1>
+    <p class="disc">This tool downloads large files repeatedly to simulate high Mbps usage.</p>
+    <button onclick="startTest()">Start Load Test</button>
+    <div class="log" id="log"></div>
+  </div>
+
+  <p class="author">Made by <a href="https://www.facebook.com/akmal.hosen.313">watchman</a></p>
+
+
+  <script>
+    const url = "https://download.thinkbroadband.com/50MB.zip"; 
+    const repeatCount = 10;
+    const log = document.getElementById("log");
+
+    function logMessage(msg) {
+      const time = new Date().toLocaleTimeString();
+      log.innerHTML += `[${time}] ${msg}<br>`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    async function startTest() {
+      log.innerHTML = "";
+      logMessage("Starting bandwidth load test...");
+      for (let i = 0; i < repeatCount; i++) {
+        try {
+          const res = await fetch(url);
+          const blob = await res.blob();
+          const sizeMB = (blob.size / (1024 * 1024)).toFixed(2);
+          logMessage(`Download ${i + 1}: ${sizeMB} MB`);
+        } catch (err) {
+          logMessage(`Download ${i + 1} failed: ${err.message}`);
+        }
+      }
+      logMessage("✅ Test complete.");
+    }
+  </script>
+</body>
+</html>
